@@ -1,0 +1,17 @@
+{
+  "version": 1.1,
+  "atDirectives": [
+    {
+      "name": "@apply",
+      "description": "Use @apply to inline any existing utility classes into your own custom CSS."
+    },
+    {
+      "name": "@theme",
+      "description": "Use @theme to define custom theme values."
+    },
+    {
+      "name": "@custom-variant",
+      "description": "Use @custom-variant to define custom CSS variants."
+    }
+  ]
+}
