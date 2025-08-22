@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { supabaseAdmin } from "@/lib/supabaseAdmin"
+
 export const runtime = "nodejs"
 
 export async function POST(req: Request) {
@@ -15,9 +16,7 @@ export async function POST(req: Request) {
       const file = form.get("file") as File | null
       if (!file) return NextResponse.json({ error: "Missing file" }, { status: 400 })
       fileName = file.name
-      const arrayBuffer = await file.arrayBuffer()
-      buffer = Buffer.from(arrayBuffer)
-      console.log(`Processing file: ${fileName}, size: ${buffer.length}`)
+      buffer = Buffer.from(await file.arrayBuffer())
     } else {
       const { fileBase64, fileName: jsonName } = await req.json()
       if (!jsonName || !fileBase64) {
@@ -27,7 +26,6 @@ export async function POST(req: Request) {
       buffer = Buffer.from(fileBase64, "base64")
     }
 
-    console.log("Attempting Supabase upload...")
     const { error } = await supabaseAdmin.storage
       .from("documents")
       .upload(`contracts/${fileName}`, buffer!, {
@@ -36,17 +34,12 @@ export async function POST(req: Request) {
       })
 
     if (error) {
-      console.error("Supabase upload error:", error)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    console.log("Upload successful")
     const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/documents/contracts/${fileName}`
-    return NextResponse.json({ url: publicUrl })
+    return NextResponse.json({ success: true, url: publicUrl })
   } catch (err: any) {
-    console.error("Upload API error:", err)
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
-
-

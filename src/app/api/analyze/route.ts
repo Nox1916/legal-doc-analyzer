@@ -11,12 +11,11 @@ export async function POST(req: Request) {
     const { fileName, type, question } = await req.json()
     console.log("📩 Analyze request:", { fileName, type, question })
 
-    // 1. Fetch text from Supabase DB
     const { data: doc, error } = await supabase
       .from("documents")
       .select("text")
       .eq("file_name", fileName)
-      .limit(1) // ✅ avoids multiple rows error
+      .limit(1)
       .maybeSingle()
 
     if (error || !doc?.text) {
@@ -27,8 +26,6 @@ export async function POST(req: Request) {
     const text = doc.text
     console.log("📑 Loaded text length:", text.length)
 
-    // 2. Call Groq
-    console.log("🤖 Sending request to Groq...")
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -50,10 +47,7 @@ export async function POST(req: Request) {
       }),
     })
 
-    console.log("📡 Groq response status:", res.status)
     const result = await res.json()
-    console.log("📡 Groq response body:", JSON.stringify(result, null, 2))
-
     if (!res.ok) {
       return NextResponse.json(
         { success: false, error: result.error?.message || "Groq API failed" },
@@ -61,7 +55,7 @@ export async function POST(req: Request) {
       )
     }
 
-    return NextResponse.json({ success: true, result: result.choices[0].message.content })
+    return NextResponse.json({ success: true, result: result.choices?.[0]?.message?.content || "" })
   } catch (err: any) {
     console.error("💥 Analyze API error:", err)
     return NextResponse.json({ success: false, error: err.message || "Unexpected error" }, { status: 500 })
