@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📑 Legal Doc Analyzer (Prototype)
 
-## Getting Started
+An AI-powered tool to **upload, parse, and analyze legal contracts**.  
+Built with **Next.js 15 + Supabase + Groq (Llama3)**.  
 
-First, run the development server:
+---
 
+## 🚀 Features
+- 📂 **Upload PDFs** → stored in Supabase Storage  
+- 🔍 **Parse documents** → extracts text using `pdf-parse`  
+- 🤖 **AI Analysis** → run summaries, Q&A, and risk analysis using Groq’s Llama3 model  
+- 🔄 **Compare contracts** → highlights differences in two legal documents  
+
+---
+
+## 🛠 Tech Stack
+- **Frontend/Backend**: Next.js 15 (App Router, API Routes)  
+- **Database & Storage**: Supabase  
+- **AI Model**: Groq API (`llama3-8b-8192`)  
+- **File Parsing**: `pdf-parse`  
+
+---
+
+## 📂 Project Structure
+src/
+├─ app/
+│ ├─ api/
+│ │ ├─ upload/route.ts # Upload files to Supabase
+│ │ ├─ parse/route.ts # Extract text from PDF + save in DB
+│ │ ├─ analyze/route.ts # Run AI Q&A, summary, risk, compare
+│ ├─ page.tsx # Main UI
+│ ├─ layout.tsx # Layout wrapper
+├─ lib/
+│ ├─ supabaseAdmin.ts # Server-side Supabase client
+│ ├─ supabaseClient.ts # Client-side Supabase client
+
+
+---
+
+## ⚡ Getting Started
+
+### 1. Clone repo
 ```bash
+git clone https://github.com/<your-org>/legal-doc-analyzer.git
+cd legal-doc-analyzer
+
+2. Install dependencies
+npm install
+
+3. Set up environment variables
+
+Create a .env.local file:
+
+NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
+GROQ_API_KEY=<your-groq-api-key>
+
+4. Run locally
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Current Status
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Works locally: Upload → Parse → Analyze → Compare
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Produces structured summaries & risk analysis
 
-## Learn More
+Deployed version requires fixing deployment setup (Vercel fails due to pdf-parse)
 
-To learn more about Next.js, take a look at the following resources:
+🚧 Next Steps (for engineering team)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Move from Vercel → deploy on AWS/GCP/Azure (Dockerize app)
 
-## Deploy on Vercel
+Ensure pdf-parse works on production
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Security
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Add authentication (Supabase Auth / SSO)
+
+Restrict document access per user
+
+Scalability
+
+Add background workers for large documents
+
+Handle rate limits of Groq API
+
+Legal AI Enhancements
+
+Optionally replace general Llama3 with legal-domain LLMs (e.g., Claude 3.5 Sonnet, Llama3.1 fine-tuned for contracts)
+
+Add clause extraction & compliance checks
