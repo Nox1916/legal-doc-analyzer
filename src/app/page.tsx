@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
 import { Upload, FileText, Search, AlertTriangle, FileCheck, GitCompare, MessageSquare, Loader2 } from "lucide-react"
 
 export default function LegalDocumentAnalyzer() {
@@ -315,7 +314,10 @@ export default function LegalDocumentAnalyzer() {
                     ) : (
                       <div className="space-y-4">
                         <h3 className="text-lg font-semibold font-serif">Extracted Clauses</h3>
-                        <p className="text-muted-foreground whitespace-pre-line">{analysisResult}</p>
+                        <pre className="bg-muted p-4 rounded-lg text-sm overflow-x-auto whitespace-pre-wrap">
+  {analysisResult}
+</pre>
+
                       </div>
                     )}
                   </TabsContent>
@@ -329,7 +331,10 @@ export default function LegalDocumentAnalyzer() {
                     ) : (
                       <div className="space-y-4">
                         <h3 className="text-lg font-semibold font-serif">Risk Analysis</h3>
-                        <p className="text-muted-foreground whitespace-pre-line">{analysisResult}</p>
+                        <pre className="bg-muted p-4 rounded-lg text-sm overflow-x-auto whitespace-pre-wrap">
+  {analysisResult}
+</pre>
+
                       </div>
                     )}
                   </TabsContent>
@@ -343,7 +348,10 @@ export default function LegalDocumentAnalyzer() {
                     ) : (
                       <div className="space-y-4">
                         <h3 className="text-lg font-semibold font-serif">Question & Answer</h3>
-                        <p className="text-muted-foreground whitespace-pre-line">{analysisResult}</p>
+                        <pre className="bg-muted p-4 rounded-lg text-sm overflow-x-auto whitespace-pre-wrap">
+  {analysisResult}
+</pre>
+
                       </div>
                     )}
                   </TabsContent>
@@ -365,7 +373,10 @@ export default function LegalDocumentAnalyzer() {
   ) : (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold font-serif">Comparison Results</h3>
-      <p className="text-muted-foreground whitespace-pre-line">{analysisResult}</p>
+      <pre className="bg-muted p-4 rounded-lg text-sm overflow-x-auto whitespace-pre-wrap">
+  {analysisResult}
+</pre>
+
     </div>
   )}
 </TabsContent>
