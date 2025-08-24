@@ -65,18 +65,81 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         model: "llama3-8b-8192",
         messages: [
-          { role: "system", content: "You are a precise legal contract analyzer." },
+          { role: "system", content: "You are a precise legal contract analyzer. Be structured and clear." },
           {
             role: "user",
             content:
               type === "qa"
-                ? `${question}\n\nDocument:\n${text}`
+                ? `Answer the legal question based on the document. 
+      Return response as plain text, not JSON.
+      
+      Question: ${question}
+      
+      Document:
+      ${text}`
+      
+                : type === "summary"
+                  ? `Summarize the contract into this structured format:
+      
+      {
+        "Parties": "...",
+        "Services": "...",
+        "Term": "...",
+        "Fees": "...",
+        "Confidentiality": "...",
+        "Termination": "...",
+        "Governing_Law": "..."
+      }
+      
+      Document:
+      ${text}`
+      
+                : type === "clauses"
+                  ? `Extract and organize the key clauses into JSON-like format:
+      
+      {
+        "Termination": "...",
+        "Payment_Terms": "...",
+        "Confidentiality": "...",
+        "Dispute_Resolution": "...",
+        "Other_Clauses": "..."
+      }
+      
+      Document:
+      ${text}`
+      
+                : type === "risk"
+                  ? `Generate a structured risk report in JSON-like format:
+      
+      {
+        "High_Risk": ["..."],
+        "Medium_Risk": ["..."],
+        "Low_Risk": ["..."],
+        "Mitigation_Recommendations": ["..."]
+      }
+      
+      Document:
+      ${text}`
+      
                 : type === "compare"
-                ? `Compare these two legal documents. Highlight differences in clauses, risks, obligations, fees, and termination terms:\n\n${text}`
-                : `Analyze this document for ${type}:\n${text}`,
+                  ? `Compare the following two legal contracts (Document A and Document B). 
+      Provide a structured JSON-like summary with these sections:
+      
+      {
+        "Contract_Duration": "...",
+        "Payment_Terms": "...",
+        "Termination_Clauses": "...",
+        "Confidentiality": "...",
+        "Liability": "...",
+        "Other_Key_Differences": "..."
+      }
+      
+      Documents:
+      ${text}`
+                  : `Analyze this document:\n${text}`,
           },
         ],
-      }),
+      }),      
     })
 
     const result = await res.json()

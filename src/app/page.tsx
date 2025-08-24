@@ -96,6 +96,7 @@ export default function LegalDocumentAnalyzer() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fileName: uploadedFiles[0].name,
+          secondFileName: type === "compare" ? uploadedFiles[1]?.name : undefined,
           type,
           question,
         }),
@@ -106,7 +107,7 @@ export default function LegalDocumentAnalyzer() {
       if (data.success) {
         setAnalysisResult(data.result)
       } else {
-        setAnalysisResult(`❌ Error: ${data.error}`)
+        setAnalysisResult(`❌ Error: ${data.error || "Unknown error"}`)
       }
     } catch (err: any) {
       setAnalysisResult(`❌ Failed: ${err.message}`)
@@ -114,6 +115,7 @@ export default function LegalDocumentAnalyzer() {
   
     setIsAnalyzing(false)
   }
+  
   
 
   return (
@@ -296,7 +298,10 @@ export default function LegalDocumentAnalyzer() {
                     ) : (
                       <div className="space-y-4">
                         <h3 className="text-lg font-semibold font-serif">Document Summary</h3>
-                        <p className="text-muted-foreground whitespace-pre-line">{analysisResult}</p>
+                        <pre className="bg-muted p-4 rounded-lg text-sm overflow-x-auto whitespace-pre-wrap">
+  {analysisResult}
+</pre>
+
                       </div>
                     )}
                   </TabsContent>
@@ -344,53 +349,27 @@ export default function LegalDocumentAnalyzer() {
                   </TabsContent>
 
                   <TabsContent value="compare" className="mt-6">
-                    {uploadedFiles.length < 2 ? (
-                      <div className="text-center py-12">
-                        <GitCompare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                        <h3 className="text-lg font-semibold mb-2 font-serif">Compare Documents</h3>
-                        <p className="text-muted-foreground">
-                          Upload at least 2 documents to enable comparison analysis.
-                        </p>
-                      </div>
-                    ) : isAnalyzing ? (
-                      <div className="flex items-center justify-center py-12">
-                        <Loader2 className="h-8 w-8 animate-spin text-primary mr-3" />
-                        <span>Comparing documents...</span>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-semibold font-serif">Document Comparison</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="p-4 border border-border rounded-lg">
-                            <h4 className="font-medium mb-2">Document 1</h4>
-                            <p className="text-sm text-muted-foreground mb-2">{uploadedFiles[0]?.name}</p>
-                            <ul className="text-sm space-y-1">
-                              <li>• 12-month term</li>
-                              <li>• Monthly billing</li>
-                              <li>• Standard liability</li>
-                            </ul>
-                          </div>
-                          <div className="p-4 border border-border rounded-lg">
-                            <h4 className="font-medium mb-2">Document 2</h4>
-                            <p className="text-sm text-muted-foreground mb-2">{uploadedFiles[1]?.name}</p>
-                            <ul className="text-sm space-y-1">
-                              <li>• 24-month term</li>
-                              <li>• Quarterly billing</li>
-                              <li>• Enhanced liability</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div className="p-4 bg-accent/10 border border-accent/20 rounded-lg">
-                          <h4 className="font-medium mb-2 text-accent-foreground">Key Differences</h4>
-                          <ul className="text-sm space-y-1 text-accent-foreground">
-                            <li>• Contract duration differs by 12 months</li>
-                            <li>• Payment frequency varies significantly</li>
-                            <li>• Liability terms have different coverage levels</li>
-                          </ul>
-                        </div>
-                      </div>
-                    )}
-                  </TabsContent>
+  {uploadedFiles.length < 2 ? (
+    <div className="text-center py-12">
+      <GitCompare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+      <h3 className="text-lg font-semibold mb-2 font-serif">Compare Documents</h3>
+      <p className="text-muted-foreground">
+        Upload at least 2 documents to enable comparison analysis.
+      </p>
+    </div>
+  ) : isAnalyzing ? (
+    <div className="flex items-center justify-center py-12">
+      <Loader2 className="h-8 w-8 animate-spin text-primary mr-3" />
+      <span>Comparing documents...</span>
+    </div>
+  ) : (
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold font-serif">Comparison Results</h3>
+      <p className="text-muted-foreground whitespace-pre-line">{analysisResult}</p>
+    </div>
+  )}
+</TabsContent>
+
                 </Tabs>
               </CardContent>
             </Card>
