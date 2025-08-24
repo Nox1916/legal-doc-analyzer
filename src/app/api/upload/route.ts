@@ -39,7 +39,9 @@ export async function POST(req: Request) {
 
     const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/documents/contracts/${fileName}`
     return NextResponse.json({ success: true, url: publicUrl })
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unexpected error"
+    console.error("💥 Unexpected parse error:", message)
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
+export const runtime = "nodejs";
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -151,8 +152,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ success: true, result: result.choices[0].message.content })
-  } catch (err: any) {
-    console.error("💥 Analyze API error:", err)
-    return NextResponse.json({ success: false, error: err.message || "Unexpected error" }, { status: 500 })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unexpected error"
+    console.error("💥 Unexpected parse error:", message)
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
