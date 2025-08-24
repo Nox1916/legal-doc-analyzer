@@ -43,24 +43,24 @@ src/
 ```bash
 git clone https://github.com/<your-org>/legal-doc-analyzer.git
 cd legal-doc-analyzer
-
-2. Install dependencies
+```
+### 2. Install dependencies
+```bash
 npm install
-
-3. Set up environment variables
-
+```
+### 3. Set up environment variables
 Create a .env.local file:
-
+```bash
 NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
 SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
 GROQ_API_KEY=<your-groq-api-key>
-
-4. Run locally
+```
+### 5. Run locally
+```bash
 npm run dev
-
-Current Status
-
+```
+### ✅ Current Status
 Works locally: Upload → Parse → Analyze → Compare
 
 Produces structured summaries & risk analysis
@@ -68,27 +68,22 @@ Produces structured summaries & risk analysis
 Deployed version requires fixing deployment setup (Vercel fails due to pdf-parse)
 
 🚧 Next Steps (for engineering team)
-
 Deployment
-
 Move from Vercel → deploy on AWS/GCP/Azure (Dockerize app)
 
-Ensure pdf-parse works on production
+Ensure pdf-parse works in production
 
 Security
-
 Add authentication (Supabase Auth / SSO)
 
 Restrict document access per user
 
 Scalability
-
 Add background workers for large documents
 
 Handle rate limits of Groq API
 
 Legal AI Enhancements
-
 Optionally replace general Llama3 with legal-domain LLMs (e.g., Claude 3.5 Sonnet, Llama3.1 fine-tuned for contracts)
 
 Add clause extraction & compliance checks
